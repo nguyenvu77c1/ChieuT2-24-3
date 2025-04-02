@@ -6,53 +6,53 @@ let constants = require('../Utils/constants')
 
 
 module.exports = {
-    getUserById: async function(id){
+    getUserById: async function (id) {
         return await userSchema.findById(id).populate("role");
     },
-    getUserByEmail: async function(email){
+    getUserByEmail: async function (email) {
         return await userSchema.findOne({
-            email:email
+            email: email
         }).populate("role");
     },
-    getUserByToken: async function(token){
+    getUserByToken: async function (token) {
         return await userSchema.findOne({
-            resetPasswordToken:token
+            resetPasswordToken: token
         }).populate("role");
     },
-    createUser:async function(username,password,email,role){
-        let roleCheck = await roleSchema.findOne({roleName:role});
-        if(roleCheck){
+    createUser: async function (username, password, email, role) {
+        let roleCheck = await roleSchema.findOne({ roleName: role });
+        if (roleCheck) {
             let newUser = new userSchema({
                 username: username,
                 password: password,
                 email: email,
                 role: roleCheck._id,
             });
-            await newUser.save();    
-            return newUser;  
-        }else{    
+            await newUser.save();
+            return newUser;
+        } else {
             throw new Error("role khong ton tai");
         }
 
     },
-    checkLogin: async function(username,password){
-        if(username&&password){
+    checkLogin: async function (username, password) {
+        if (username && password) {
             let user = await userSchema.findOne({
-                username:username
+                username: username
             })
-            if(user){
-                if(bcrypt.compareSync(password,user.password)){
+            if (user) {
+                if (bcrypt.compareSync(password, user.password)) {
                     return jwt.sign({
-                        id:user._id,
-                        expired:new Date(Date.now()+30*60*1000)
-                    },constants.SECRET_KEY);
-                }else{
+                        id: user._id,
+                        expireIn: (new Date(Date.now() + 30 * 60 * 1000)).getTime()
+                    }, constants.SECRET_KEY);
+                } else {
                     throw new Error("username or password is incorrect")
                 }
-            }else{
+            } else {
                 throw new Error("username or password is incorrect")
             }
-        }else{
+        } else {
             throw new Error("username or password is incorrect")
         }
     }

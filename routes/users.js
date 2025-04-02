@@ -122,13 +122,13 @@ router.post('/change_avatar', check_authentication, upload.single('avatar'), asy
       }
     })
     console.log(result.data.url);
-    fs.unlinkSync(filePath)
+s
     let url = result.data.url;
-    req.user.avatarUrl= url;
+    req.user.avatarUrl = url;
     await req.user.save()
     res.status(200).send({
-      success:true,
-      message:req.user
+      success: true,
+      message: req.user
     })
   }
 })
