@@ -2,22 +2,23 @@ let mongoose = require('mongoose');
 let bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, unique: true, required: true },
-    password: { type: String, required: true},
-    email: { type: String, unique: true, required: true},
-    fullName: { type: String, default: '' },
-    avatarUrl: { type: String, default: '' },
-    status: { type: Boolean, default: false },
-    loginCount: { type: Number, default: 0, min: 0 },
-    role:{
-        type:mongoose.Types.ObjectId,
-        ref:'role'
-    },
-    resetPasswordToken:String,
-    resetPasswordTokenExp:Date
-  },{
-    timestamps:true
+  username: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+  email: { type: String, unique: true, required: true },
+  fullName: { type: String, default: '' },  // Trường fullName
+  avatarUrl: { type: String, default: '' },  // Trường avatarUrl
+  status: { type: Boolean, default: false },
+  loginCount: { type: Number, default: 0, min: 0 },
+  role: {
+      type: mongoose.Types.ObjectId,
+      ref: 'role'
+  },
+  resetPasswordToken: String,
+  resetPasswordTokenExp: Date
+}, {
+  timestamps: true
 });
+
 userSchema.pre('save',function(next){
   if(this.isModified('password')){
     const salt = bcrypt.genSaltSync(10);

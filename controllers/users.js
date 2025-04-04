@@ -19,7 +19,7 @@ module.exports = {
             resetPasswordToken: token
         }).populate("role");
     },
-    createUser: async function (username, password, email, role) {
+    createUser: async function (username, password, email, role, fullName = "", avatarUrl = "") {
         let roleCheck = await roleSchema.findOne({ roleName: role });
         if (roleCheck) {
             let newUser = new userSchema({
@@ -27,14 +27,17 @@ module.exports = {
                 password: password,
                 email: email,
                 role: roleCheck._id,
+                fullName: fullName,  // Đảm bảo fullName được lưu vào cơ sở dữ liệu
+                avatarUrl: avatarUrl  // Đảm bảo avatarUrl được lưu vào cơ sở dữ liệu
             });
             await newUser.save();
             return newUser;
         } else {
             throw new Error("role khong ton tai");
         }
-
     },
+    
+    
     checkLogin: async function (username, password) {
         if (username && password) {
             let user = await userSchema.findOne({

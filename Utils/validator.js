@@ -14,8 +14,8 @@ let config = {
 
 module.exports = {
     validators: [
-        body('email').isEmail()
-            .withMessage(constants.EMAIL_ERROR),
+        body('email').isEmail().withMessage(constants.EMAIL_ERROR),
+        body('fullName'), 
         body('password').isStrongPassword(config.password_config)
             .withMessage(util.format(constants.PASSWORD_ERROR,
                 config.password_config.minLength,
@@ -27,6 +27,8 @@ module.exports = {
         body('username').isAlphanumeric().withMessage('username chi dc chu va so'),
         body('role').isIn(constants.USER_PERMISSION).withMessage('role khong hop le'),
         body("imgURL").isURL()
+
+
     ],
     validator_middleware: function (req, res, next) {
         let errors = validationResult(req);

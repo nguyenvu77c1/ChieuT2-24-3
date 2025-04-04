@@ -8,21 +8,25 @@ let mailMiddleware = require('../Utils/sendMail')
 router.post('/signup', async function (req, res, next) {
   try {
     let body = req.body;
+    console.log("Request Body: ", body);  // In ra để kiểm tra
     let result = await userController.createUser(
       body.username,
       body.password,
       body.email,
-      'user'
-    )
+      'user',
+      body.fullname,       // Thêm fullname
+      body.avatarUrl      // Thêm avatarUrl
+    );
     res.status(200).send({
       success: true,
       data: result
-    })
+    });
   } catch (error) {
     next(error);
   }
-
 })
+
+
 router.post('/login', async function (req, res, next) {
   try {
     let username = req.body.username;

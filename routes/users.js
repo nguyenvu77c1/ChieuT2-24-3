@@ -48,7 +48,9 @@ router.post('/',
         body.username,
         body.password,
         body.email,
-        body.role
+        body.role,
+        
+        
       )
       res.status(200).send({
         success: true,
